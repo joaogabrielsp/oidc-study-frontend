@@ -10,12 +10,15 @@ export type User = {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     async function loadUser() {
       try {
         const response = await fetch(
-          "http://localhost:3000/me",
+          `${API_URL}/me`,
           {
             credentials: "include",
           },
@@ -23,7 +26,7 @@ export function useAuth() {
 
         if (response.status === 401) {
           window.location.href =
-            "http://localhost:3000/login";
+            `${API_URL}/login`;
           return;
         }
 
@@ -34,8 +37,9 @@ export function useAuth() {
         const user = await response.json();
 
         setUser(user);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
+        setError(err as Error);
       } finally {
         setLoading(false);
       }
@@ -47,5 +51,6 @@ export function useAuth() {
   return {
     user,
     loading,
+    error
   };
 }

@@ -3,10 +3,14 @@ import { NotesPage } from "./pages/NotesPage";
 import { Toaster } from "@/components/ui/sonner";
 
 function App() {
-  const { user, loading } = useAuth();
+  const { user, loading, error } = useAuth();
 
   if (loading) {
     return <div>Loading...</div>;
+  }
+
+  if (error) {
+  return <div>Error</div>;
   }
 
   return (

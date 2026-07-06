@@ -14,6 +14,8 @@ type Props = {
   user: User | null;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export function NotesPage({ user }: Props) {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,7 +25,7 @@ export function NotesPage({ user }: Props) {
   useEffect(() => {
     async function loadNotes() {
       try {
-        const res = await apiFetch("http://localhost:3000/notes", {
+        const res = await apiFetch(`${API_URL}/notes`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error("Failed to load notes");
@@ -38,7 +40,7 @@ export function NotesPage({ user }: Props) {
   }, []);
 
   async function handleCreate(text: string) {
-    const res = await apiFetch("http://localhost:3000/notes", {
+    const res = await apiFetch(`${API_URL}/notes`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -51,7 +53,7 @@ export function NotesPage({ user }: Props) {
   }
 
   async function handleUpdate(id: string, text: string) {
-    const res = await apiFetch(`http://localhost:3000/notes/${id}`, {
+    const res = await apiFetch(`${API_URL}/notes/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -66,7 +68,7 @@ export function NotesPage({ user }: Props) {
 
   async function handleDelete(id: string) {
     try {
-      const res = await apiFetch(`http://localhost:3000/notes/${id}`, {
+      const res = await apiFetch(`${API_URL}/notes/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
